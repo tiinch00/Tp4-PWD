@@ -10,14 +10,21 @@ class Auto {
     private $objDniDuenio; //foreign key de persona
     private $mensajeOperacion;
 
-    public function __constructor()
-    {
+    public function __construct(){
 
         $this->patente = "";
         $this->marca = "";
         $this->modelo = "";
-        $this->$objDniDuenio = new Persona(); // Inicializamos como objeto
+        $this->objDniDuenio = new Persona(); // Inicializamos como objeto
         $this->mensajeOperacion = "";
+    }
+    public function setear($patente,$marca,$modelo,Persona $objDniDuenio){	
+	    
+		$this->setPatente($patente);
+		$this->setMarca($marca);
+		$this->setModelo($modelo);
+		$this->setObjDniDuenio($objDniDuenio);
+		
     }
 
     public function getPatente()
@@ -52,12 +59,12 @@ class Auto {
 
     public function getObjDniDuenio()
     {
-        return $this->$objDniDuenio;
+        return $this->objDniDuenio;
     }
 
     public function setObjDniDuenio($valor)
     {
-        $this->$objDniDuenio = $valor;
+        $this->objDniDuenio = $valor;
     }
 
     public function getmensajeoperacion(){
@@ -69,14 +76,6 @@ class Auto {
         $this->mensajeOperacion = $valor;
     }
 
-    public function setear($patente,$marca,$modelo,$objDniDuenio){	
-	    
-		$this->setPatente($patente);
-		$this->setMarca($marca);
-		$this->setModelo($modelo);
-		$this->setObjDniDuenio($objDniDuenio);
-		
-    }
 
     public function cargar(){
         $resp = false;
@@ -112,11 +111,11 @@ class Auto {
         $resp = false;
 
         $consulta = "INSERT INTO auto (Patente, Marca, Modelo, DniDuenio)
-        VALUES ('" . $this->getPatente() . "','" . $this->getMarca() . "'," . $this->getModelo() . ",'" . $this->getDniDuenio() . "')";
+        VALUES ('" . $this->getPatente() . "','" . $this->getMarca() . "'," . $this->getModelo() . ",'" . $this->getObjDniDuenio()->getNroDni() . "')";
 
 
-        if ($baseDatos->iniciar()) {
-            if ($baseDatos->ejecutar($consulta)) {
+        if ($baseDatos->Iniciar()) {
+            if ($baseDatos->Ejecutar($consulta)) {
                 $resp = true;
             } else {
                 $this->setmensajeoperacion("Auto->insertar: ".$base->getError());
@@ -169,10 +168,10 @@ class Auto {
 	    $base= new BaseDatos();
 		$consultaModifica="UPDATE auto SET Marca = '{$this->getMarca()}', 
 		                                   Modelo = {$this->getModelo()},
-										   DniDuenio= '{$this->getObjDniDuenio()->getNroDni()}', 										  
+										   DniDuenio= '{$this->getObjDniDuenio()->getNroDni()}' 										  
 										   WHERE Patente =  '{$this->getPatente()}'";
-		if($base->iniciar()){
-			if($base->ejecutar($consultaModifica)){
+		if($base->Iniciar()){
+			if($base->Ejecutar($consultaModifica)){
 			    $resp=  true;
 			}else{
 				$this->setmensajeoperacion("Auto->modificar: ".$base->getError());
@@ -191,7 +190,7 @@ class Auto {
 		$base=new BaseDatos();
 		$resp=false;
 		if($base->iniciar()){
-				$consultaBorrar="DELETE FROM auto WHERE Patente=" . $this->getPatente();
+				$consultaBorrar="DELETE FROM auto WHERE Patente=  '".$this->getPatente()."'";
 				if($base->ejecutar($consultaBorrar)){
 					
 				    $resp=  true;

@@ -98,7 +98,7 @@ class Persona{
                 if($res>0){
                     $row = $base->Registro();
                     $this->setear($row['NroDni'], $row['Apellido'],$row['Nombre'],$row['fechaNac'], $row['Telefono'], $row['Domicilio']);
-                    
+                    $resp = true;
                 }
             }
         } else {
@@ -119,10 +119,10 @@ class Persona{
 	 */		
     public function buscar($dni){
 		$base=new BaseDatos();
-		$consultaPersona="Select * from persona where NroDni= ".$dni;
+		$consultaPersona="Select * From persona WHERE NroDni= '".$dni."'";
 		$resp= false;
-		if($base->iniciar()){
-			if($base->ejecutar($consultaPersona)){
+		if($base->Iniciar()){
+			if($base->Ejecutar($consultaPersona)){
 				if($row2=$base->registro()){
 				    $this->setNroDni($dni);
 					$this->setApellido($row2['Apellido']);
@@ -171,7 +171,7 @@ class Persona{
                     array_push($arregloPersona, $persona);
                 }
             } else {
-                $arregloPersona = false;
+                $arregloPersona = [];
                 $this->setMensajeOperacion("Persona->listar: ".$base->getError());
             }
         } else {
@@ -189,14 +189,14 @@ class Persona{
 		$resp= false;
 		$consulta="INSERT INTO persona(NroDni,Apellido,Nombre,fechaNac,Telefono,Domicilio) 
 				VALUES ('".$this->getNroDni()."','".$this->getApellido()."','".$this->getNombre()."','".$this->getFechaNac()."','".$this->getTelefono()."','".$this->getDomicilio()."')";
-		    if($base->iniciar()){
-				if($base->ejecutar($consulta)){
+		    if($base->Iniciar()){
+				if($base->Ejecutar($consulta)){
 					$resp = true;
 				}else{
-					$this->setmensajeoperacion("Persona->insetar: ".$base->getError());
+					$this->setmensajeoperacion("Persona->insertar: ".$base->getError());
 				}
 			}else{
-				$this->setmensajeoperacion("Persona->insetar: ".$base->getError());
+				$this->setmensajeoperacion("Persona->insertar: ".$base->getError());
 			}
 			return $resp;
 		}
@@ -206,16 +206,16 @@ class Persona{
 	
 	
 	public function modificar(){
-	    $resp =false; 
-	    $base=new BaseDatos();
+	    $resp = false; 
+	    $base = new BaseDatos();
 		$consultaModifica="UPDATE persona SET Apellido = '{$this->getApellido()}', 
 		                                      Nombre = '{$this->getNombre()}' ,
 											  fechaNac = '{$this->getFechaNac()}', 
 											  Telefono = '{$this->getTelefono()}',
 											  Domicilio = '{$this->getDomicilio()}' 
 											  WHERE NroDni=  '{$this->getNroDni()}'";
-		if($base->iniciar()){
-			if($base->ejecutar($consultaModifica)){
+		if($base->Iniciar()){
+			if($base->Ejecutar($consultaModifica)){
 			    $resp=  true;
 			}else{
 				$this->setmensajeoperacion("Persona->modificar: ".$base->getError());
@@ -231,9 +231,9 @@ class Persona{
 	public function eliminar(){
 		$base=new BaseDatos();
 		$resp=false;
-		if($base->iniciar()){
+		if($base->Iniciar()){
 				$consultaBorrar="DELETE FROM persona WHERE NroDni = '".$this->getNroDni()."'";
-				if($base->ejecutar($consultaBorrar)){
+				if($base->Ejecutar($consultaBorrar)){
 					
 				    $resp=  true;
 				}else{
