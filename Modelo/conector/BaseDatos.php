@@ -14,7 +14,7 @@ class BaseDatos extends PDO {
     public function __construct(){
         $this->engine = 'mysql';
         $this->host = 'localhost';
-        $this->database = 'Tp5-PWD';
+        $this->database = 'Tp4-PWD';
         $this->user = 'root';
         $this->pass = '';
         $this->debug = true;

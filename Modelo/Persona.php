@@ -76,7 +76,7 @@ class Persona{
 		$this->mensajeoperacion = $mensaje;
 	}
 
-	public function cargar($nroDoc,$apellido,$nombre,$fechaNac,$telefono,$domicilio){	
+	public function setear($nroDoc,$apellido,$nombre,$fechaNac,$telefono,$domicilio){	
 	    
 		$this->setNroDni($nroDoc);
 		$this->setApellido($apellido);
@@ -85,6 +85,28 @@ class Persona{
 		$this->setTelefono($telefono);
 		$this->setDomicilio($domicilio);
 		
+    }
+
+	
+    public function cargar(){
+        $resp = false;
+        $base=new BaseDatos();
+        $sql="SELECT * FROM persona WHERE NroDni = '" . $this->getNroDni() . "'";
+        if ($base->Iniciar()) {
+            $res = $base->Ejecutar($sql);
+            if($res>-1){
+                if($res>0){
+                    $row = $base->Registro();
+                    $this->setear($row['NroDni'], $row['Apellido'],$row['Nombre'],$row['fechaNac'], $row['Telefono'], $row['Domicilio']);
+                    
+                }
+            }
+        } else {
+            $this->setmensajeoperacion("Tabla->listar: ".$base->getError());
+        }
+        return $resp;
+    
+        
     }
 	
 
@@ -112,11 +134,11 @@ class Persona{
 				}				
 			
 		 	}	else {
-		 			$this->setmensajeoperacion($base->getError());
+		 			$this->setmensajeoperacion("Persona->buscar: ".$base->getError());
 		 		
 			}
 		 }	else {
-		 		$this->setmensajeoperacion($base->getError());
+		 		$this->setmensajeoperacion("Persona->buscar: ".$base->getError());
 		 	
 		 }		
 		 return $resp;
@@ -124,7 +146,7 @@ class Persona{
     
 
 	public function listar($condicion = ""){
-        $arregloPersona = null;
+        $arregloPersona = [];
         $base = new BaseDatos();
         $consultaPersonas = "SELECT * FROM persona";
         if ($condicion != "") {
@@ -132,9 +154,10 @@ class Persona{
         }
         $consultaPersonas .= " ORDER BY Apellido";
 
-        if ($base->iniciar()) {
-            if ($base->ejecutar($consultaPersonas)) {
-                $arregloPersona = [];
+		$res = $base->Ejecutar($consultaPersonas);
+
+        if ($res>-1) {
+            if ($res>0) {
                 while ($row2 = $base->Registro()) {
                     $nroDoc = $row2['NroDni'];
 					$apellido = $row2['Apellido'];
@@ -144,16 +167,16 @@ class Persona{
 					$domicilio = $row2['Domicilio'];
 
                     $persona = new Persona();
-                    $persona->cargar($nroDoc,$nombre,$apellido,$fechaNac,$telefono,$domicilio);
+                    $persona->setear($nroDoc,$apellido,$nombre,$fechaNac,$telefono,$domicilio);
                     array_push($arregloPersona, $persona);
                 }
             } else {
                 $arregloPersona = false;
-                $this->setMensajeOperacion($base->getError());
+                $this->setMensajeOperacion("Persona->listar: ".$base->getError());
             }
         } else {
             $arregloPersona = false;
-            $this->setMensajeOperacion($base->getError());
+            $this->setMensajeOperacion("Persona->listar: ".$base->getError());
         }
 
         return $arregloPersona;
@@ -170,10 +193,10 @@ class Persona{
 				if($base->ejecutar($consulta)){
 					$resp = true;
 				}else{
-					$this->setmensajeoperacion($base->getError());
+					$this->setmensajeoperacion("Persona->insetar: ".$base->getError());
 				}
 			}else{
-				$this->setmensajeoperacion($base->getError());
+				$this->setmensajeoperacion("Persona->insetar: ".$base->getError());
 			}
 			return $resp;
 		}
@@ -195,11 +218,11 @@ class Persona{
 			if($base->ejecutar($consultaModifica)){
 			    $resp=  true;
 			}else{
-				$this->setmensajeoperacion($base->getError());
+				$this->setmensajeoperacion("Persona->modificar: ".$base->getError());
 				
 			}
 		}else{
-				$this->setmensajeoperacion($base->getError());
+				$this->setmensajeoperacion("Persona->modificar: ".$base->getError());
 			
 		}
 		return $resp;
@@ -209,16 +232,16 @@ class Persona{
 		$base=new BaseDatos();
 		$resp=false;
 		if($base->iniciar()){
-				$consultaBorrar="DELETE FROM persona WHERE NroDni=".$this->getNroDni();
+				$consultaBorrar="DELETE FROM persona WHERE NroDni = '".$this->getNroDni()."'";
 				if($base->ejecutar($consultaBorrar)){
 					
 				    $resp=  true;
 				}else{
-						$this->setmensajeoperacion($base->getError());
+						$this->setmensajeoperacion("Persona->eliminar: ".$base->getError());
 					
 				}
 		}else{
-				$this->setmensajeoperacion($base->getError());
+				$this->setmensajeoperacion("Persona->eliminar: ".$base->getError());
 			
 		}
 		return $resp; 

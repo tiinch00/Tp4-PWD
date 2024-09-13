@@ -1,6 +1,6 @@
 <?php
 include_once '../Modelo/conector/BaseDatos.php';  // Asegúrate de que la clase BaseDatos esté correctamente incluida
-include_once 'Persona.php';
+include_once '../Modelo/Persona.php';
 
 function mostrarMenu() {
     echo "\n=== MENU ===\n";
@@ -28,7 +28,7 @@ function insertarPersona() {
     echo "Domicilio: ";
     $domicilio = trim(fgets(STDIN));
 
-    $persona->cargar($nroDni, $apellido, $nombre, $fechaNac, $telefono, $domicilio);
+    $persona->setear($nroDni, $apellido, $nombre, $fechaNac, $telefono, $domicilio);
     
     if ($persona->insertar()) {
         echo "Persona insertada correctamente.\n";
@@ -55,11 +55,7 @@ function modificarPersona() {
         echo "Nuevo Domicilio (actual: " . $persona->getDomicilio() . "): ";
         $domicilio = trim(fgets(STDIN));
 
-        $persona->setApellido($apellido);
-        $persona->setNombre($nombre);
-        $persona->setFechaNac($fechaNac);
-        $persona->setTelefono($telefono);
-        $persona->setDomicilio($domicilio);
+        $persona->setear($nroDni, $apellido, $nombre, $fechaNac, $telefono, $domicilio);
 
         if ($persona->modificar()) {
             echo "Persona modificada correctamente.\n";
