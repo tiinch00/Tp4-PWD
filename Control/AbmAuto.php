@@ -70,7 +70,7 @@ class AbmAuto{
         $resp = false;
         if ($this->seteadosCamposClaves($param)){
             $elObjtAuto = $this->cargarObjetoConClave($param);
-            if ( $elObjtAuto!=null and  $elObjtAuto->eliminar()){
+            if ( $elObjtAuto!=null &&  $elObjtAuto->eliminar()){
                 $resp = true;
             }
         }
@@ -100,32 +100,37 @@ class AbmAuto{
      * @param array $param
      * @return boolean
      */
-     public function buscar($param){
-            $where = "";
-            
-            if (!empty($param)){
-    
-                if  (isset($param['Patente'])){            
-                    $where.=" Patente ='".$param['Patente'] . "'";
-                }
-                    
-                if  (isset($param['Marca'])){
-                    $where.=" Marca ='".$param['Marca']."'";
-                }
-                    
-                if  (isset($param['Modelo'])){
-                    $where.= " Modelo =" .$param['Modelo'] . "";
-                }
-                    
-                if  (isset($param['DniDuenio'])){
-                    $where.=" DniDuenio ='". $param['DniDuenio'] ."'";
-                }
-                    
+    public function buscar($param) {
+        $where = [];
+        
+        if (!empty($param)) {
+            if (isset($param['Patente']) && !empty($param['Patente'])) {
+                $where[] = "Patente = '" . $param['Patente'] . "'";
             }
-            $arreglo = Auto::listar($where);  
-            return $arreglo;
-            
+    
+            if (isset($param['Marca']) && !empty($param['Marca'])) {
+                $where[] = "Marca = '" . $param['Marca'] . "'";
+            }
+    
+            if (isset($param['Modelo']) && !empty($param['Modelo'])) {
+                $where[] = "Modelo = '" . $param['Modelo'] . "'";
+            }
+    
+            if (isset($param['DniDuenio']) && !empty($param['DniDuenio'])) {
+                $where[] = "DniDuenio = '" . $param['DniDuenio'] . "'";
+            }
         }
+    
+        // Convertir el array en una cadena con AND
+        $whereClause = "";
+        if (!empty($where)) {
+            $whereClause = implode(" AND ", $where);
+        }
+    
+        $objAuto = new Auto();
+        $arreglo = $objAuto->listar($whereClause);  
+        return $arreglo;
+    }
     
 }
 ?>

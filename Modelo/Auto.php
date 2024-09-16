@@ -137,25 +137,33 @@ class Auto {
 
         $resp = $base->Ejecutar($consulta);
 
-        if ($res>-1) {
-            if ($res>0) {$arregloAuto = [];
-                while ($row2 = $base->Registro()) {
-                    $patente = $row2['Patente'];
-					$marca = $row2['Marca'];
-                    $modelo = $row2['Modelo'];
-					$objDuenio = $row2['DniDuenio'];
+        if ($resp>-1) {
+            if ($resp>0) {
+                while ($row = $base->Registro()) {
+                    // objeto Auto
+                $auto = new Auto();
+                
+                // objeto Persona
+                $duenioDni = new Persona();
+                $duenioDni->setNroDni($row['DniDuenio']); // Se asigna el DNI del duenio
+                
+                // Carga los datos del duenio desde la tabla Persona
+                if ($duenioDni->cargar()) {
+                    // Se setea los datos del auto junto con el duenio
+                    $auto->setear($row['Patente'], $row['Marca'], $row['Modelo'], $duenioDni);
+                    array_push($arregloAuto, $auto);
+                } else {
+                    // Si no se pudo cargar el dueño, puedes registrar un error
+                    $auto->setmensajeoperacion("Auto->listar: No se pudo cargar el dueño del auto con patente " . $row['Patente']);
+                }
                     
-
-                    $objAuto = new Auto();
-                    $objAuto->setear($patente,$marca,$modelo,$objDuenio);
-                    array_push($arregloAuto, $objAuto);
                 }
             } else {
-                $arregloAuto = false;
+                $arregloAuto = [];
                 $this->setMensajeOperacion("Auto->listar: ".$base->getError());
             }
         } else {
-            $arregloAuto = false;
+            $arregloAuto = [];
             $this->setMensajeOperacion("Auto->listar: ".$base->getError());
         }
 

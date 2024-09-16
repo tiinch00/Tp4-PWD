@@ -129,7 +129,8 @@ class AbmPersona{
                     $where.=" Domicilio ='" .$param['Domicilio'] ."'";
                 }
             }
-            $arreglo = Persona::listar($where);  
+            $objPersona = new Persona;
+            $arreglo = $objPersona->listar($where);  
             return $arreglo;
             
         }

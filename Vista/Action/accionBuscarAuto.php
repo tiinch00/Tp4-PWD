@@ -93,6 +93,6 @@ if (isset($datos['accion'])){
 
     
 
-   <div align="center"><a href="../buscarAuto.php">volver</a></div>
+   <div align="center"><a href="../listaPersona.php">volver</a></div>
 </body>
 </html>

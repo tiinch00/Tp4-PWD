@@ -1,5 +1,5 @@
 <?php
-    include_once "../../configuracion.php";
+    include_once "../configuracion.php";
     $objAbmAuto = new AbmAuto();
     $listaAutos = $objAbmAuto->buscar(null);
 ?>
@@ -30,6 +30,7 @@
                 echo '<td style="width:100px;">' . $listaAutos[$i]->getModelo() . '</td>';
                 echo '<td style="width:100px;">' . $listaAutos[$i]->getObjDniDuenio()->getApellido() . '</td>';
                 echo '<td style="width:100px;">' . $listaAutos[$i]->getObjDniDuenio()->getNombre() . '</td>';
+                echo '</tr>';
 
             }
         } else {
