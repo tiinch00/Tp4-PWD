@@ -131,6 +131,7 @@ class AbmAuto{
         $arreglo = $objAuto->listar($whereClause);  
         return $arreglo;
     }
+
     
 }
 ?>

@@ -129,11 +129,29 @@ class AbmPersona{
                     $where.=" Domicilio ='" .$param['Domicilio'] ."'";
                 }
             }
-            $objPersona = new Persona;
+            $objPersona = new Persona();
             $arreglo = $objPersona->listar($where);  
             return $arreglo;
             
         }
+
+        public function existePersona($datos){
+
+            $esta = false;
+
+            $objPersona= new Persona();
+
+            $resp = $objPersona->buscar($datos["NroDni"]);
+
+            if($resp){
+                
+                $esta = true;
+
+            }
+            return $esta;
+
+        }
+        
     
 }
 ?>
