@@ -25,11 +25,14 @@ $objPersona = new AbmPersona();
 $mensaje = "";
 
 if (isset($datos['accion']) && $datos['accion'] == 'nuevo') {
-    if ($objPersona->alta($datos)) {
+    if (!$objPersona->existePersona($datos)){
+        if ($objPersona->alta($datos)) {
         $mensaje = "La accion ".$datos['accion']." se realizo correctamente.";
-    } else {
-        $mensaje = "La accion ".$datos['accion']." no pudo concretarse.";
-    }
+        }
+ } else {
+    $mensaje = "La accion ".$datos['accion']." no pudo concretarse\n".
+    "Esa persona ya existe";
+ }
 }
 ?>
 
