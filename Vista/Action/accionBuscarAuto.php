@@ -36,6 +36,8 @@ if (isset($datos['accion'])){
     }
 
    $arrayDatos = $objAbmAuto->buscar($datos);
+   verEstructura($arrayDatos);
+
     
 }
 ?>

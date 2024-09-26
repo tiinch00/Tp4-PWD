@@ -76,6 +76,48 @@ class Auto {
         $this->mensajeOperacion = $valor;
     }
 
+    
+	/**
+	 * Recupera los datos de un auto
+	 * @param string $patente
+	 * @return true en caso de encontrar los datos, false en caso contrario 
+	 */		
+    public function buscar($patente){
+		$base=new BaseDatos();
+		$consultaPersona="Select * From auto WHERE Patente= '".$patente."'";
+		$resp= false;
+		if($base->Iniciar()){
+			if($base->Ejecutar($consultaPersona)){
+				if($row2=$base->Registro()){
+				    $this->setPatente($patente);
+					$this->setMarca($row2['Marca']);
+					$this->setModelo($row2['Modelo']);
+
+                    $objPersona = new Persona();
+                    $objPersona->setNroDni($row2['DniDuenio']);
+					if ($objPersona->cargar()){
+
+                      $this->setObjDniDuenio($objPersona);
+
+                        $resp= true;
+
+                    } else {
+                        $this->setmensajeoperacion("Auto->buscar: No se pudo cargar el dueño con DNI " . $row2['DniDuenio']);
+                    }
+					
+				}				
+			
+		 	}	else {
+		 			$this->setmensajeoperacion("Persona->buscar: ".$base->getError());
+		 		
+			}
+		 }	else {
+		 		$this->setmensajeoperacion("Persona->buscar: ".$base->getError());
+		 	
+		 }		
+		 return $resp;
+	}	
+
 
     public function cargar(){
         $resp = false;
@@ -133,7 +175,7 @@ class Auto {
         if ($condicion != "") {
             $consulta.= ' WHERE ' . $condicion;
         }
-        $consulta .= " ORDER BY Patente";
+      
 
         $resp = $base->Ejecutar($consulta);
 
@@ -213,6 +255,7 @@ class Auto {
 		return $resp; 
 	}
 
+    
 
 	
 }

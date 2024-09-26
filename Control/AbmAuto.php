@@ -88,7 +88,7 @@ class AbmAuto{
         $resp = false;
         if ($this->seteadosCamposClaves($param)){
             $elObjtAuto = $this->cargarObjeto($param);
-            if($elObjtAuto!=null and $elObjtAuto->modificar()){
+            if($elObjtAuto!=null && $elObjtAuto->modificar()){
                 $resp = true;
             }
         }
@@ -130,6 +130,30 @@ class AbmAuto{
         $objAuto = new Auto();
         $arreglo = $objAuto->listar($whereClause);  
         return $arreglo;
+    }
+
+    public function buscarPorPatente($patente) {
+        $param = ["Patente" => $patente];
+        $autos = $this->buscar($param);
+        return !empty($autos) ? $autos[0] : null; // Retorna el primer auto encontrado o null
+    }
+
+    
+    public function existeAuto($datos){
+
+        $esta = false;
+
+        $objAuto= new Auto();
+
+        $resp = $objAuto->buscar($datos["Patente"]);
+
+        if($resp){
+            
+            $esta = true;
+
+        }
+        return $esta;
+
     }
 
     
