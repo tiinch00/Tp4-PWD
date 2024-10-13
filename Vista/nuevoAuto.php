@@ -30,7 +30,7 @@ control antes generada, no se puede acceder directamente a las clases del ORM.
 
             <label for="DniDuenio">Dni Dueño:</label><br>
             <input type="text" name="DniDuenio" id="DniDuenio" placeholder="Ingrese dni protietario" required><br>
-            <input type="hidden" id="action" name="action">
+            <input type="hidden" id="accion" name="accion" value="nuevo">
 
             <input type="submit" value="Enviar">
         </form>

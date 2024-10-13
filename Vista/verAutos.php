@@ -32,6 +32,8 @@
                 echo '<td style="width:100px;">' . $listaAutos[$i]->getObjDniDuenio()->getNombre() . '</td>';
                 echo '</tr>';
 
+                
+
             }
         } else {
             echo "<div>no hay autos cargados</div>";
@@ -40,6 +42,16 @@
         
         ?>
     </table>
+
+    <div id="comments" style="margin-top: 50px;">
+    <?php
+    $cmtx_identifier = '1'; // Identificador único para cada página
+    $cmtx_reference  = 'Lista de Autos'; // Referencia visible en la administración
+    $cmtx_folder     = '/comentarios/comments/';
+    require($_SERVER['DOCUMENT_ROOT'] . $cmtx_folder . 'frontend/index.php');
+    ?>
+</div>
+
 
 <?php
 //include_once "Estructura/Footer.php";
